@@ -1,16 +1,12 @@
 <template>
   <div class="q-pa-md">
-    <div class="text-h4">Task List</div>
-    <q-list bordered separator v-if="Object.keys(tasks).length">
-      <task-item
-        v-for="(task, key) in tasks"
-        :key="key"
-        :task="task"
-        :id="key"
-      />
-    </q-list>
-    <div v-else class="text-h6 text-center q-mt-lg">No task in the list</div>
+    <noTask v-if="!Object.keys(tasks).length" />
+    <taskTodo :tasks="tasks" v-else />
 
+    <taskCompleted
+      :tasksCompleted="tasksCompleted"
+      v-if="Object.keys(tasksCompleted).length"
+    />
     <div class="absolute-bottom-right q-mb-lg q-mr-lg">
       <q-btn
         round
@@ -28,9 +24,11 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-import taskItem from "../components/tasks/task";
-import addTask from "../components/tasks/modals/addTask";
 
+import addTask from "../components/tasks/modals/addTask";
+import taskTodo from "../components/tasks/taskTodo";
+import taskCompleted from "../components/tasks/taskCompleted";
+import noTask from "../components/tasks/noTask";
 export default {
   name: "PageIndex",
   data() {
@@ -39,11 +37,18 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("tasks", ["tasks"])
+    ...mapGetters("tasks", ["tasks", "tasksCompleted"])
+  },
+  mounted() {
+    this.$root.$on("showAddTask", () => {
+      this.showAddTask = true;
+    });
   },
   components: {
-    "task-item": taskItem,
-    "add-task": addTask
+    "add-task": addTask,
+    taskTodo: taskTodo,
+    taskCompleted: taskCompleted,
+    noTask: noTask
   }
 };
 </script>
