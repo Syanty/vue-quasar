@@ -36,24 +36,51 @@
       </div>
     </q-item-section>
     <q-item-section side>
-      <q-btn
-        flat
-        rounded
-        dense
-        color="red"
-        icon="delete"
-        @click.stop="onPromptDelete(id)"
-      />
+      <div class="row">
+        <!-- <q-btn
+          @click.stop="showEditTask = true"
+          flat
+          round
+          dense
+          color="primary"
+          icon="edit"
+        /> -->
+        <q-btn
+          @click.stop="onPromptDelete(id)"
+          flat
+          round
+          dense
+          color="red"
+          icon="delete"
+        />
+      </div>
+      <q-dialog v-model="showEditTask">
+        <edit-task
+          :id="id"
+          :showData="showData"
+          @close="showEditTask = false"
+        />
+      </q-dialog>
     </q-item-section>
   </q-item>
 </template>
 
 <script>
 import { mapActions } from "vuex";
+import editTask from "./modals/editTask";
 export default {
   props: ["task", "id"],
+  data() {
+    return {
+      showEditTask: false,
+      showData: ""
+    };
+  },
+  mounted() {
+    this.showData = this.task;
+  },
   methods: {
-    ...mapActions("tasks", ["updateTask", "deleteTask"]),
+    ...mapActions("tasks", ["deleteTask", "updateTask"]),
     onPromptDelete(id) {
       this.$q
         .dialog({
@@ -69,6 +96,9 @@ export default {
           console.log(">>>> Cancel");
         });
     }
+  },
+  components: {
+    "edit-task": editTask
   }
 };
 </script>

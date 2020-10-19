@@ -1,7 +1,11 @@
 <template>
-  <div class="q-pa-md">
-    <noTask v-if="!Object.keys(tasks).length" />
-    <taskTodo :tasks="tasks" v-else />
+  <div class="q-pa-md e4">
+    <todoSearch />
+    <p v-if="!Object.keys(tasks).length && !Object.keys(tasksCompleted).length">
+      No search Results
+    </p>
+    <noTask v-if="!Object.keys(tasks).length && !search" />
+    <taskTodo :tasks="tasks" v-if="Object.keys(tasks).length" />
 
     <taskCompleted
       :tasksCompleted="tasksCompleted"
@@ -23,12 +27,13 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 import addTask from "../components/tasks/modals/addTask";
 import taskTodo from "../components/tasks/taskTodo";
 import taskCompleted from "../components/tasks/taskCompleted";
 import noTask from "../components/tasks/noTask";
+import todoSearch from "../components/tasks/tools/todoSearch";
 export default {
   name: "PageIndex",
   data() {
@@ -37,7 +42,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("tasks", ["tasks", "tasksCompleted"])
+    ...mapGetters("tasks", ["tasks", "tasksCompleted"]),
+    ...mapState("tasks", ["search"])
   },
   mounted() {
     this.$root.$on("showAddTask", () => {
@@ -48,7 +54,8 @@ export default {
     "add-task": addTask,
     taskTodo: taskTodo,
     taskCompleted: taskCompleted,
-    noTask: noTask
+    noTask: noTask,
+    todoSearch: todoSearch
   }
 };
 </script>

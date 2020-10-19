@@ -1,6 +1,6 @@
 <template>
   <q-card>
-    <modal-header>Add Task</modal-header>
+    <modal-header>Edit Task</modal-header>
     <q-form @submit.prevent="onSubmit" @reset="onReset" class="q-gutter-md">
       <q-card-section class="q-pt-none">
         <div class="row q-mb-sm">
@@ -83,7 +83,7 @@
           </q-input>
         </div>
       </q-card-section>
-      <modal-footer :status="'Save'"></modal-footer>
+      <modal-footer :status="'Update'"></modal-footer>
     </q-form>
   </q-card>
 </template>
@@ -102,15 +102,24 @@ export default {
       }
     };
   },
+  props: ["showData", "id"],
+  mounted() {
+    this.taskToSubmit = this.showData;
+  },
+  components: {
+    "modal-header": modalHeader,
+    "modal-footer": modalFooter
+  },
   methods: {
-    ...mapActions("tasks", ["addTask"]),
+    ...mapActions("tasks", ["updateTask"]),
+
     onSubmit() {
       if (!this.$refs.name.hasError) {
         this.submitTask();
       }
     },
     submitTask() {
-      this.addTask(this.taskToSubmit);
+      this.updateTask({ updatedTask: this.taskToSubmit, id: this.id });
       this.$emit("close");
     },
     onReset() {
@@ -120,10 +129,6 @@ export default {
       this.taskToSubmit.dueDate = "";
       this.taskToSubmit.dueTime = "";
     }
-  },
-  components: {
-    "modal-header": modalHeader,
-    "modal-footer": modalFooter
   }
 };
 </script>

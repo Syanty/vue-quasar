@@ -1,7 +1,7 @@
 export default function() {
   return {
     tasks: {
-      /* ID1: {
+      ID1: {
         name: "Task 1",
         completed: false,
         dueDate: "2020/10/14",
@@ -18,7 +18,8 @@ export default function() {
         completed: false,
         dueDate: "2020/10/16",
         dueTime: "8:43 PM"
-      } */
-    }
+      }
+    },
+    search: ""
   };
 }

@@ -17,7 +17,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-footer elevated>
+    <q-footer>
       <q-tabs>
         <q-route-tab
           v-for="link in essentialLinks"
@@ -85,7 +85,7 @@ export default {
 };
 </script>
 <style>
-@media screen and (min-width: 770px) {
+@media screen and (min-width: 768px) {
   .q-footer {
     display: none;
   }
