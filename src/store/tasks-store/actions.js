@@ -17,3 +17,6 @@ export function deleteTask({ commit }, id) {
 export function setSearch({ commit }, value) {
   commit("setSearch", value);
 }
+export function setSort({ commit }, value) {
+  commit("setSort", value);
+}

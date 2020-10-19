@@ -1,6 +1,12 @@
 <template>
   <div class="q-pa-md e4">
-    <todoSearch />
+    <div class="row">
+      <div class="col">
+        <todoSearch />
+      </div>
+      <div class="col-md-2"><todoSort /></div>
+    </div>
+
     <p v-if="!Object.keys(tasks).length && !Object.keys(tasksCompleted).length">
       No search Results
     </p>
@@ -34,6 +40,7 @@ import taskTodo from "../components/tasks/taskTodo";
 import taskCompleted from "../components/tasks/taskCompleted";
 import noTask from "../components/tasks/noTask";
 import todoSearch from "../components/tasks/tools/todoSearch";
+import todoSort from "../components/tasks/tools/todoSort";
 export default {
   name: "PageIndex",
   data() {
@@ -55,7 +62,8 @@ export default {
     taskTodo: taskTodo,
     taskCompleted: taskCompleted,
     noTask: noTask,
-    todoSearch: todoSearch
+    todoSearch: todoSearch,
+    todoSort: todoSort
   }
 };
 </script>
