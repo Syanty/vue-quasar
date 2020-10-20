@@ -11,10 +11,6 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>{{ id }}</q-item-label>
-    </q-item-section>
-
-    <q-item-section>
       <q-item-label :class="{ 'text-strikethrough': task.completed }">{{
         task.name
       }}</q-item-label>
@@ -30,7 +26,7 @@
             task.dueDate
           }}</q-item-label>
           <q-item-label caption class="row justify-end"
-            ><small>{{ task.dueTime }}</small></q-item-label
+            ><small>{{ taskdueTime }}</small></q-item-label
           >
         </div>
       </div>
@@ -54,19 +50,13 @@
           icon="delete"
         />
       </div>
-      <q-dialog v-model="showEditTask">
-        <edit-task
-          :id="id"
-          :showData="showData"
-          @close="showEditTask = false"
-        />
-      </q-dialog>
     </q-item-section>
   </q-item>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { date } from "quasar";
+import { mapActions, mapGetters } from "vuex";
 import editTask from "./modals/editTask";
 export default {
   props: ["task", "id"],
@@ -76,8 +66,18 @@ export default {
       showData: ""
     };
   },
-  mounted() {
-    this.showData = this.task;
+  computed: {
+    ...mapGetters("settings", ["settings"]),
+
+    taskdueTime() {
+      if (this.settings.show12HourFormatTime) {
+        return date.formatDate(
+          this.task.dueDate + " " + this.task.dueTime,
+          "h:mmA"
+        );
+      }
+      return this.task.dueTime;
+    }
   },
   methods: {
     ...mapActions("tasks", ["deleteTask", "updateTask"]),
@@ -85,7 +85,7 @@ export default {
       this.$q
         .dialog({
           title: "Confirm",
-          message: "Would you like to delete " + id + "?",
+          message: "Would you like to delete " + this.task.name + "?",
           cancel: true,
           persistent: true
         })
