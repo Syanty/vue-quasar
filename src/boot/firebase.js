@@ -6,6 +6,10 @@ import "firebase/analytics";
 
 // Add the Firebase products that you want to use
 import "firebase/auth";
+
+//database
+import "firebase/database";
+
 var firebaseConfig = {
   apiKey: "AIzaSyCDiyKNGoqoT1xrAy6ZZEOPMSqD7U9MyxM",
   authDomain: "awesome-todo-4eef8.firebaseapp.com",
@@ -21,5 +25,6 @@ let firebaseApp = firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
 let firebaseAuth = firebaseApp.auth();
+let firebaseDb = firebaseApp.database();
 
-export { firebaseAuth };
+export { firebaseAuth, firebaseDb };

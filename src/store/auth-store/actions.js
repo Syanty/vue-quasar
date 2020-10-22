@@ -25,13 +25,14 @@ export function loginUser({}, payload) {
     });
 }
 
-export function onAuthStateChanged({ commit }) {
+export function onAuthStateChanged({ commit, dispatch }) {
   firebaseAuth.onAuthStateChanged(user => {
     Loading.hide();
     if (user) {
       commit("setLoggedIn", true);
       LocalStorage.set("LoggedIn", true);
       this.$router.push("/").catch(err => {});
+      dispatch("tasks/fbReadData", null, { root: true });
     } else {
       commit("setLoggedIn", false);
       LocalStorage.set("LoggedIn", false);
