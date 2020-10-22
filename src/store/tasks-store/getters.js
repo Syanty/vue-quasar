@@ -1,5 +1,4 @@
 export function tasksSorted(state) {
-  console.log(state.sort);
   let tasksSorted = {},
     keysOrdered = Object.keys(state.tasks);
 
