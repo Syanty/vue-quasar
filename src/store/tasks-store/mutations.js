@@ -10,6 +10,10 @@ export function deleteTask(state, id) {
   Vue.delete(state.tasks, id);
 }
 
+export function clearTasks(state) {
+  state.tasks = {};
+}
+
 export function setSearch(state, value) {
   state.search = value;
 }

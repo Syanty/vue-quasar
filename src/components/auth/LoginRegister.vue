@@ -25,6 +25,7 @@
     <div class="row q-mb-md">
       <q-input
         ref="password"
+        type="password"
         class="col"
         outlined
         v-model="formData.password"
