@@ -1,87 +1,16 @@
 <template>
   <q-card>
     <modal-header>Edit Task</modal-header>
-    <q-form @submit.prevent="onSubmit" @reset="onReset" class="q-gutter-md">
+    <q-form @submit.prevent="onSubmit" class="q-gutter-md">
       <q-card-section class="q-pt-none">
-        <div class="row q-mb-sm">
-          <q-input
-            outlined
-            ref="name"
-            v-model="taskToSubmit.name"
-            label="Task Name"
-            class="col"
-            autofocus
-            :rules="[val => !!val || 'Field is required']"
-            ><template v-slot:append>
-              <q-icon
-                v-if="taskToSubmit.name"
-                name="close"
-                @click="taskToSubmit.name = ''"
-                class="cursor-pointer"
-              />
-            </template>
-          </q-input>
-        </div>
-        <div class="row q-mb-sm">
-          <q-input
-            outlined
-            label="Due Date"
-            mask="date"
-            :rules="['date']"
-            v-model="taskToSubmit.dueDate"
-            class="col"
-          >
-            <template v-slot:append>
-              <q-icon
-                v-if="taskToSubmit.dueDate"
-                name="close"
-                @click="clearDate()"
-                class="cursor-pointer"
-              />
-              <q-icon name="event" class="cursor-pointer">
-                <q-popup-proxy
-                  ref="qDateProxy"
-                  transition-show="scale"
-                  transition-hide="scale"
-                >
-                  <q-date v-model="taskToSubmit.dueDate">
-                    <div class="row items-center justify-end">
-                      <q-btn v-close-popup label="Close" color="primary" flat />
-                    </div>
-                  </q-date>
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
-        </div>
-        <div class="row q-mb-sm" v-if="taskToSubmit.dueDate">
-          <q-input
-            outlined
-            label="Due Time"
-            mask="time"
-            :rules="['time']"
-            v-model="taskToSubmit.dueTime"
-            class="col"
-          >
-            <template v-slot:append>
-              <q-icon
-                v-if="taskToSubmit.dueTime"
-                name="close"
-                @click="taskToSubmit.dueTime = ''"
-                class="cursor-pointer"
-              />
-              <q-icon name="access_time" class="cursor-pointer">
-                <q-popup-proxy transition-show="scale" transition-hide="scale">
-                  <q-time v-model="taskToSubmit.dueTime">
-                    <div class="row items-center justify-end">
-                      <q-btn v-close-popup label="Close" color="primary" flat />
-                    </div>
-                  </q-time>
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
-        </div>
+        <modalTaskName :name.sync="taskToSubmit.name" ref="modalTaskName" />
+
+        <modalDueDate :dueDate.sync="taskToSubmit.dueDate" @clear="clearDate" />
+
+        <modalDueTime
+          v-if="taskToSubmit.dueDate"
+          :dueTime.sync="taskToSubmit.dueTime"
+        />
       </q-card-section>
       <modal-footer :status="'Update'"></modal-footer>
     </q-form>
@@ -91,30 +20,33 @@
 import { mapActions } from "vuex";
 import modalHeader from "./modalHeader";
 import modalFooter from "./modalFooter";
+import modalDueTime from "./modalDueTime";
+import modalDueDate from "./modalDueDate";
+import modalTaskName from "./modalTaskName";
+import { date } from "quasar";
 export default {
   data() {
     return {
-      taskToSubmit: {
-        name: "",
-        dueDate: "",
-        dueTime: "",
-        completed: false
-      }
+      taskToSubmit: {}
     };
   },
-  props: ["showData", "id"],
+  props: ["task", "id"],
   mounted() {
-    this.taskToSubmit = this.showData;
+    this.taskToSubmit = Object.assign({}, this.task);
   },
   components: {
     "modal-header": modalHeader,
-    "modal-footer": modalFooter
+    "modal-footer": modalFooter,
+    modalDueTime: modalDueTime,
+    modalDueDate: modalDueDate,
+    modalTaskName: modalTaskName
   },
   methods: {
     ...mapActions("tasks", ["updateTask"]),
 
     onSubmit() {
-      if (!this.$refs.name.hasError) {
+      this.$refs.modalTaskName.$refs.name.validate();
+      if (!this.$refs.modalTaskName.$refs.name.hasError) {
         this.submitTask();
       }
     },
@@ -122,9 +54,7 @@ export default {
       this.updateTask({ updatedTask: this.taskToSubmit, id: this.id });
       this.$emit("close");
     },
-    onReset() {
-      console.log("Reseted");
-    },
+
     clearDate() {
       this.taskToSubmit.dueDate = "";
       this.taskToSubmit.dueTime = "";

@@ -33,14 +33,14 @@
     </q-item-section>
     <q-item-section side>
       <div class="row">
-        <!-- <q-btn
+        <q-btn
           @click.stop="showEditTask = true"
           flat
           round
           dense
           color="primary"
           icon="edit"
-        /> -->
+        />
         <q-btn
           @click.stop="onPromptDelete(id)"
           flat
@@ -50,6 +50,9 @@
           icon="delete"
         />
       </div>
+      <q-dialog v-model="showEditTask">
+        <edit-task @close="showEditTask = false" :task="task" :id="id" />
+      </q-dialog>
     </q-item-section>
   </q-item>
 </template>
@@ -62,8 +65,7 @@ export default {
   props: ["task", "id"],
   data() {
     return {
-      showEditTask: false,
-      showData: ""
+      showEditTask: false
     };
   },
   computed: {
@@ -81,6 +83,7 @@ export default {
   },
   methods: {
     ...mapActions("tasks", ["deleteTask", "updateTask"]),
+
     onPromptDelete(id) {
       this.$q
         .dialog({
