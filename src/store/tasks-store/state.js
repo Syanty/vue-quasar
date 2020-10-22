@@ -21,6 +21,7 @@ export default function() {
       } */
     },
     search: "",
-    sort: "name"
+    sort: "name",
+    tasksDownloaded: false
   };
 }

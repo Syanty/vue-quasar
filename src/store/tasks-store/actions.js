@@ -12,6 +12,9 @@ export function addTask({ dispatch }, task) {
 export function updateTask({ dispatch }, data) {
   dispatch("updateTaskToFb", data);
 }
+export function update({ commit }, payload) {
+  commit("updateTask", payload);
+}
 export function deleteTask({ dispatch }, id) {
   dispatch("deleteTaskFromFb", id);
 }
@@ -25,6 +28,10 @@ export function setSort({ commit }, value) {
 export function fbReadData({ commit }) {
   let userId = firebaseAuth.currentUser.uid;
   let userTasks = firebaseDb.ref("tasks/" + userId);
+
+  userTasks.once("value", snapshot => {
+    commit("setTaskDownloaded", true);
+  });
 
   //on child_added
   userTasks.on("child_added", snapshot => {

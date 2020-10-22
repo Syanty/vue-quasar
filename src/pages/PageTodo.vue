@@ -1,35 +1,44 @@
 <template>
   <div class="q-pa-md e4">
-    <div class="row">
-      <div class="col">
-        <todoSearch />
+    <template v-if="tasksDownloaded">
+      <div class="row">
+        <div class="col">
+          <todoSearch />
+        </div>
+        <div class="col-md-2"><todoSort /></div>
       </div>
-      <div class="col-md-2"><todoSort /></div>
-    </div>
 
-    <p v-if="!Object.keys(tasks).length && !Object.keys(tasksCompleted).length">
-      No search Results
-    </p>
-    <noTask v-if="!Object.keys(tasks).length && !search" />
-    <taskTodo :tasks="tasks" v-if="Object.keys(tasks).length" />
+      <p
+        v-if="!Object.keys(tasks).length && !Object.keys(tasksCompleted).length"
+      >
+        No search Results
+      </p>
+      <noTask v-if="!Object.keys(tasks).length && !search" />
+      <taskTodo :tasks="tasks" v-if="Object.keys(tasks).length" />
 
-    <taskCompleted
-      :tasksCompleted="tasksCompleted"
-      v-if="Object.keys(tasksCompleted).length"
-    />
-    <div class="absolute-bottom-right q-mb-lg q-mr-lg">
-      <q-btn
-        round
-        dense
-        color="primary"
-        size="24px"
-        icon="add"
-        @click="showAddTask = true"
+      <taskCompleted
+        :tasksCompleted="tasksCompleted"
+        v-if="Object.keys(tasksCompleted).length"
       />
-    </div>
-    <q-dialog v-model="showAddTask">
-      <add-task @close="showAddTask = false" />
-    </q-dialog>
+      <div class="absolute-bottom-right q-mb-lg q-mr-lg">
+        <q-btn
+          round
+          dense
+          color="primary"
+          size="24px"
+          icon="add"
+          @click="showAddTask = true"
+        />
+      </div>
+      <q-dialog v-model="showAddTask">
+        <add-task @close="showAddTask = false" />
+      </q-dialog>
+    </template>
+    <template v-else>
+      <span class="absolute-center"
+        ><q-spinner color="primary" size="3em"
+      /></span>
+    </template>
   </div>
 </template>
 <script>
@@ -50,7 +59,7 @@ export default {
   },
   computed: {
     ...mapGetters("tasks", ["tasks", "tasksCompleted"]),
-    ...mapState("tasks", ["search"])
+    ...mapState("tasks", ["search", "tasksDownloaded"])
   },
   mounted() {
     this.$root.$on("showAddTask", () => {

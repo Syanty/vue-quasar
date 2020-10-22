@@ -2,8 +2,9 @@
   <q-item
     tag="label"
     clickable
-    @click="updateTask({ id: id, updates: { completed: !task.completed } })"
+    @click="update({ id: id, updates: { completed: !task.completed } })"
     :class="!task.completed ? 'bg-orange-1' : 'bg-teal-1'"
+    v-touch-hold:1000.mouse="showEditTaskModal"
     v-ripple
   >
     <q-item-section side top>
@@ -82,7 +83,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions("tasks", ["deleteTask", "updateTask"]),
+    ...mapActions("tasks", ["deleteTask", "update"]),
+    showEditTaskModal() {
+      this.showEditTask = true;
+    },
 
     onPromptDelete(id) {
       this.$q
@@ -95,9 +99,7 @@ export default {
         .onOk(() => {
           this.deleteTask(id);
         })
-        .onCancel(() => {
-          console.log(">>>> Cancel");
-        });
+        .onCancel(() => {});
     }
   },
   components: {
