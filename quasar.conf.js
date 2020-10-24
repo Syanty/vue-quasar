@@ -163,6 +163,7 @@ module.exports = function(/* ctx */) {
         // protocol: 'myapp://path',
         // Windows only
         // win32metadata: { ... }
+        platform: "win32"
       },
 
       builder: {
