@@ -5,18 +5,17 @@
 </template>
 <script>
 import { mapActions } from "vuex";
-import electronApp from "electron";
 export default {
   name: "App",
   methods: {
     ...mapActions("auth", ["onAuthStateChanged"])
   },
   mounted() {
-    if (this.$q.platform.is.electron) {
+    /* if (this.$q.platform.is.electron) {
       electronApp.ipcRenderer.on("show-settings", () => {
         this.$router.push("/settings");
       });
-    }
+    } */
     this.onAuthStateChanged();
   }
 };

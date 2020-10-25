@@ -62,7 +62,7 @@
           :key="link.title"
           v-bind="link"
         />
-        <q-item
+        <!-- <q-item
           v-if="$q.platform.is.electron"
           @click="quitApp"
           class="text-grey-4 absolute-bottom"
@@ -74,7 +74,7 @@
           <q-item-section>
             <q-item-label>Quit</q-item-label>
           </q-item-section>
-        </q-item>
+        </q-item> -->
       </q-list>
     </q-drawer>
 
@@ -111,7 +111,7 @@ export default {
   methods: {
     ...mapActions("auth", ["logoutUser"]),
     quitApp() {
-      this.$q
+      /* this.$q
         .dialog({
           title: "Confirm",
           message: "Really quit Awesome Todo?",
@@ -122,7 +122,7 @@ export default {
           if (this.$q.platform.is.electron) {
             require("electron").ipcRenderer.send("quit-app");
           }
-        });
+        }); */
     }
   },
   components: { EssentialLink },
